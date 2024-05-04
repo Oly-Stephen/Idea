@@ -22,6 +22,7 @@ public class Thought {
     private String title;
     private String description;
     private LocalDate localDate;
+    private boolean isRelevant = false;
 
     @PrePersist
     protected void onCreate() {

@@ -16,5 +16,6 @@ public class ThoughtDto {
     private String title;
     private String description;
     private LocalDate localDate;
+    private boolean isRelevant;
 
 }

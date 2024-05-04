@@ -26,4 +26,15 @@ public class ThoughtController {
     public ResponseEntity<ThoughtDto> getThoughtById(@PathVariable(name = "id") long id){
         return ResponseEntity.ok(thoughtService.getThoughtById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable long id) {
+        return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteThought(@PathVariable long id) {
+        thoughtService.deleteThought(id);
+        return ResponseEntity.noContent().build();
+    }
 }

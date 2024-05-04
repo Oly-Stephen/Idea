@@ -7,4 +7,6 @@ public interface ThoughtService {
 
     ThoughtDto createThought(ThoughtDto thoughtDto);
     ThoughtDto getThoughtById(long id);
+    ThoughtDto updateThought(ThoughtDto thoughtDto, long id);
+    void deleteThought(long id);
 }
