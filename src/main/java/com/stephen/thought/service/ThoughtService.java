@@ -1,12 +1,11 @@
 package com.stephen.thought.service;
 
 import com.stephen.thought.dto.ThoughtDto;
-import com.stephen.thought.models.Thought;
 
 public interface ThoughtService {
 
     ThoughtDto createThought(ThoughtDto thoughtDto);
-    ThoughtDto getThoughtById(long id);
-    ThoughtDto updateThought(ThoughtDto thoughtDto, long id);
-    void deleteThought(long id);
+    ThoughtDto getThoughtById(long thoughtId);
+    ThoughtDto updateThought(ThoughtDto thoughtDto, long thoughtId);
+    void deleteThought(long thoughtId);
 }

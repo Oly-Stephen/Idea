@@ -15,7 +15,7 @@ public class ThoughtServiceImpl implements ThoughtService {
 
 
     private final ThoughtRepository thoughtRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ThoughtServiceImpl(ThoughtRepository thoughtRepository, ModelMapper modelMapper) {
         this.thoughtRepository = thoughtRepository;
@@ -30,17 +30,17 @@ public class ThoughtServiceImpl implements ThoughtService {
     }
 
     @Override
-    public ThoughtDto getThoughtById(long id) {
-        Thought thought = thoughtRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", id));
+    public ThoughtDto getThoughtById(long thoughtId) {
+        Thought thought = thoughtRepository.findById(thoughtId)
+                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", thoughtId));
         return mapToDto(thought);
     }
 
     @Override
-    public ThoughtDto updateThought(ThoughtDto thoughtDto, long id) {
-        Thought existingThought = thoughtRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", id));
-        existingThought.setId(id);
+    public ThoughtDto updateThought(ThoughtDto thoughtDto, long thoughtId) {
+        Thought existingThought = thoughtRepository.findById(thoughtId)
+                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", thoughtId));
+        existingThought.setId(thoughtId);
         existingThought.setTitle(thoughtDto.getTitle());
         existingThought.setDescription(thoughtDto.getDescription());
         existingThought.setLocalDate(LocalDate.now());
@@ -52,9 +52,9 @@ public class ThoughtServiceImpl implements ThoughtService {
 
 
     @Override
-    public void deleteThought(long id) {
-        Thought existingThought = thoughtRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", id));
+    public void deleteThought(long thoughtId) {
+        Thought existingThought = thoughtRepository.findById(thoughtId)
+                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", thoughtId));
         thoughtRepository.delete(existingThought);
     }
 
@@ -62,13 +62,11 @@ public class ThoughtServiceImpl implements ThoughtService {
 
     // Convert entity to DTO
     private ThoughtDto mapToDto(Thought thought){
-        ThoughtDto thoughtDto = modelMapper.map(thought, ThoughtDto.class);
-        return thoughtDto;
+        return modelMapper.map(thought, ThoughtDto.class);
     }
 
     // convert DTO to entity
     private Thought mapToEntity(ThoughtDto thoughtDto){
-        Thought thought = modelMapper.map(thoughtDto, Thought.class);
-        return thought;
+        return modelMapper.map(thoughtDto, Thought.class);
     }
 }

@@ -2,7 +2,6 @@ package com.stephen.thought.Controller;
 
 import com.stephen.thought.dto.ThoughtDto;
 import com.stephen.thought.service.ThoughtService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +22,18 @@ public class ThoughtController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ThoughtDto> getThoughtById(@PathVariable(name = "id") long id){
-        return ResponseEntity.ok(thoughtService.getThoughtById(id));
+    public ResponseEntity<ThoughtDto> getThoughtById(@PathVariable("id") long categoryId){
+        return ResponseEntity.ok(thoughtService.getThoughtById(categoryId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable long id) {
-        return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, id));
+    public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable("id") long categoryId) {
+        return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, categoryId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteThought(@PathVariable long id) {
-        thoughtService.deleteThought(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteThought(@PathVariable("id") long categoryId) {
+        thoughtService.deleteThought(categoryId);
+        return ResponseEntity.ok("Thought deleted successfully!."); // Return a success message
     }
 }
