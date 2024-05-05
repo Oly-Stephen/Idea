@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ThoughtServiceImpl implements ThoughtService {
@@ -37,6 +39,12 @@ public class ThoughtServiceImpl implements ThoughtService {
     }
 
     @Override
+    public List<ThoughtDto> getALlThoughts() {
+        List<Thought> thoughts = thoughtRepository.findAll();
+        return thoughts.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
     public ThoughtDto updateThought(ThoughtDto thoughtDto, long thoughtId) {
         Thought existingThought = thoughtRepository.findById(thoughtId)
                 .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", thoughtId));
@@ -58,6 +66,14 @@ public class ThoughtServiceImpl implements ThoughtService {
         thoughtRepository.delete(existingThought);
     }
 
+    @Override
+    public void deleteSelectedThoughts(List<Long> thoughtIds) {
+        for(Long id : thoughtIds) {
+            Thought existingThought = thoughtRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", id));
+            thoughtRepository.delete(existingThought);
+        }
+    }
 
 
     // Convert entity to DTO

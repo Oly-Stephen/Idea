@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/thoughts")
 public class ThoughtController {
@@ -26,6 +28,11 @@ public class ThoughtController {
         return ResponseEntity.ok(thoughtService.getThoughtById(categoryId));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ThoughtDto>> getAllThoughts(){
+        return ResponseEntity.ok(thoughtService.getALlThoughts());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable("id") long categoryId) {
         return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, categoryId));
@@ -36,4 +43,12 @@ public class ThoughtController {
         thoughtService.deleteThought(categoryId);
         return ResponseEntity.ok("Thought deleted successfully!."); // Return a success message
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllThoughts(@RequestBody List<Long> thoughtIds) {
+        thoughtService.deleteSelectedThoughts(thoughtIds);
+        return ResponseEntity.ok("Selected thoughts deleted successfully!");
+    }
+
+
 }
