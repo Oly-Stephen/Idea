@@ -24,23 +24,23 @@ public class ThoughtController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ThoughtDto> getThoughtById(@PathVariable("id") long categoryId){
-        return ResponseEntity.ok(thoughtService.getThoughtById(categoryId));
+    public ResponseEntity<ThoughtDto> getThoughtById(@PathVariable("id") long thoughtId){
+        return ResponseEntity.ok(thoughtService.getThoughtById(thoughtId));
     }
 
     @GetMapping
     public ResponseEntity<List<ThoughtDto>> getAllThoughts(){
-        return ResponseEntity.ok(thoughtService.getALlThoughts());
+        return ResponseEntity.ok(thoughtService.getAllThoughts());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable("id") long categoryId) {
-        return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, categoryId));
+    public ResponseEntity<ThoughtDto> updateThought(@RequestBody ThoughtDto thoughtDto, @PathVariable("id") long todoId) {
+        return ResponseEntity.ok(thoughtService.updateThought(thoughtDto, todoId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteThought(@PathVariable("id") long categoryId) {
-        thoughtService.deleteThought(categoryId);
+    public ResponseEntity<String> deleteThought(@PathVariable("id") long todoId) {
+        thoughtService.deleteThought(todoId);
         return ResponseEntity.ok("Thought deleted successfully!."); // Return a success message
     }
 
@@ -49,6 +49,4 @@ public class ThoughtController {
         thoughtService.deleteSelectedThoughts(thoughtIds);
         return ResponseEntity.ok("Selected thoughts deleted successfully!");
     }
-
-
 }

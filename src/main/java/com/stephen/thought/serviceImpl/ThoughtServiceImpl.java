@@ -2,13 +2,14 @@ package com.stephen.thought.serviceImpl;
 
 import com.stephen.thought.Exception.ResourceNotFoundException;
 import com.stephen.thought.dto.ThoughtDto;
+import com.stephen.thought.dto.TodoDto;
 import com.stephen.thought.models.Thought;
 import com.stephen.thought.repository.ThoughtRepository;
 import com.stephen.thought.service.ThoughtService;
+import com.stephen.thought.service.TodoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,10 +17,13 @@ import java.util.stream.Collectors;
 public class ThoughtServiceImpl implements ThoughtService {
 
 
+
+    private final TodoService todoService;
     private final ThoughtRepository thoughtRepository;
     private final ModelMapper modelMapper;
 
-    public ThoughtServiceImpl(ThoughtRepository thoughtRepository, ModelMapper modelMapper) {
+    public ThoughtServiceImpl(TodoService todoService, ThoughtRepository thoughtRepository, ModelMapper modelMapper) {
+        this.todoService = todoService;
         this.thoughtRepository = thoughtRepository;
         this.modelMapper = modelMapper;
     }
@@ -39,7 +43,7 @@ public class ThoughtServiceImpl implements ThoughtService {
     }
 
     @Override
-    public List<ThoughtDto> getALlThoughts() {
+    public List<ThoughtDto> getAllThoughts() {
         List<Thought> thoughts = thoughtRepository.findAll();
         return thoughts.stream().map(this::mapToDto).collect(Collectors.toList());
     }
@@ -48,11 +52,20 @@ public class ThoughtServiceImpl implements ThoughtService {
     public ThoughtDto updateThought(ThoughtDto thoughtDto, long thoughtId) {
         Thought existingThought = thoughtRepository.findById(thoughtId)
                 .orElseThrow(() -> new ResourceNotFoundException("Thought", "id", thoughtId));
-        existingThought.setId(thoughtId);
+//        existingThought.setId(thoughtId);
+
         existingThought.setTitle(thoughtDto.getTitle());
         existingThought.setDescription(thoughtDto.getDescription());
-        existingThought.setLocalDate(LocalDate.now());
+
+        boolean wasRelevant = existingThought.isRelevant();
         existingThought.setRelevant(thoughtDto.isRelevant());
+
+        if (!wasRelevant && thoughtDto.isRelevant()) {
+            TodoDto todoDto = new TodoDto();
+            todoDto.setTitle(existingThought.getTitle());
+            todoDto.setDescription(existingThought.getDescription());
+            todoService.createTodo(todoDto);
+        }
 
         Thought updatedThought = thoughtRepository.save(existingThought); // Save the updated thought back to the database
         return mapToDto(updatedThought); // Return the updated ThoughtDto
