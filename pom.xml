@@ -76,7 +76,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>thoughtapp</finalName>
 	</build>
 
 </project>
